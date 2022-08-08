@@ -1,0 +1,15 @@
+.names {
+  border: 1px solid cornflowerblue;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.statusContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.status {
+  font-size: 11px;
+}
