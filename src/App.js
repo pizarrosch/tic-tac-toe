@@ -1,37 +1,41 @@
-import Cells from "./components/Cells/Cells";
+import Cell from "./components/Cell/Cell";
 import s from "./App.module.css"
 import {useState} from "react";
-import Cross from "./components/images/close.png"
-import Circle from "./components/images/rec.png"
 import MoveStatus from "./components/moveStatus/moveStatus";
 
 function App() {
   const [firstScore, setFirstScore] = useState(0);
   const [secondScore, setSecondScore] = useState(0);
-  const [cell, setCell] = useState(null);
-  const [moveStatus, setMoveStatus] = useState(null);
+  const [moveStatus, setMoveStatus] = useState(1);
   const [name1, setName1] = useState('Player 1');
   const [name2, setName2] = useState('Player 2');
 
-  function addCross() {
-    setCell(<img
-        src={Cross}
-        alt="Cross"
-      />);
-  }
+  const [matrix, setMatrix] = useState([
+    null, null, null,
+    null, null, null,
+    null, null, null
+  ]);
 
-  function addCircle() {
-    setCell(<img
-      src={Circle}
-      alt="Circle"
-    />);
+  function handleCellClick(cellIndex) {
+    if(moveStatus === 1) {
+      setMatrix([...matrix.map((item, i) => {
+        console.log(cellIndex)
+        if (i === cellIndex) {
+          return 'cross';
+        }
+        return item;
+      })])
+    } else {
+      setMatrix([...matrix.map((item) => item === null ? 'circle' : null)])
+    }
   }
 
   function startOver() {
     setName1('Timur');
     setName2('Zaur');
-    setMoveStatus('Your move');
   }
+
+
 
   return (
     <div className={s.App}>
@@ -39,6 +43,7 @@ function App() {
         <MoveStatus
           name={name1}
           status={moveStatus}
+          setStatus={setMoveStatus}
         />
         <span>{firstScore}</span>
         <span>{secondScore}</span>
@@ -48,19 +53,13 @@ function App() {
         />
       </div>
       <div className={s.root}>
-       <Cells
-        content={cell}
-        onAddCross={addCross}
-       />
-       <Cells
-       />
-       <Cells/>
-       <Cells/>
-       <Cells/>
-       <Cells/>
-       <Cells/>
-       <Cells/>
-       <Cells/>
+        {matrix.map((symbol, i) => (
+          <Cell
+            content={symbol}
+            index={i}
+            onClick={() => handleCellClick(i)}
+          />
+        ))}
       </div>
       <button className={s.button} onClick={startOver}>Start over</button>
     </div>
