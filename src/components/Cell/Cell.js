@@ -8,6 +8,7 @@ function Cell({content, index, onClick}) {
       {content && <img
         src={content === 'circle' ? circleImg : crossImg}
         alt='symbol'
+        className={s.image}
       />}
     </div>
   )

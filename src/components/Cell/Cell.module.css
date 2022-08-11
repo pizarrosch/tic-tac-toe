@@ -1,8 +1,8 @@
 .div {
   display: flex;
-  flex-direction: column;
   border: 1px solid black;
   height: 100px;
+  align-items: center;
   justify-content: center;
   text-align: center;
 }
@@ -21,4 +21,9 @@
   :nth-child(3)
   ) {
   border-top: none;
+}
+
+.image {
+  width: 31px;
+  height: 31px
 }

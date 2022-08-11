@@ -1,7 +1,15 @@
-.names {
+.name1 {
   border: 1px solid cornflowerblue;
   border-radius: 5px;
   padding: 10px 20px;
+  background-color: lightseagreen;
+}
+
+.name2 {
+  border: 1px solid cornflowerblue;
+  border-radius: 5px;
+  padding: 10px 20px;
+  background-color: orange;
 }
 
 .statusContainer {
