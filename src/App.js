@@ -108,6 +108,7 @@ function App() {
     ]);
     setGameOver(false);
     setDraw(false);
+    setMoveStatus('Player 1 plays');
   }
 
 
