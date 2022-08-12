@@ -2,6 +2,7 @@ import Cell from "./components/Cell/Cell";
 import s from "./App.module.css"
 import {useEffect, useState} from "react";
 import PlayerLabel from "./components/PlayerLabel/PlayerLabel";
+import NameInput from "./components/NameInput/NameInput";
 
 function App() {
   const [firstScore, setFirstScore] = useState(0);
@@ -11,12 +12,36 @@ function App() {
   const [name2, setName2] = useState('Player 2');
   const [gameOver, setGameOver] = useState(false);
   const [draw, setDraw] = useState(false);
+  const [firstInput, setFirstInput] = useState('');
+  const [secondInput, setSecondInput] = useState('');
 
   const [matrix, setMatrix] = useState([
     null, null, null,
     null, null, null,
     null, null, null
   ]);
+
+  function onFirstInputChange(e) {
+    setFirstInput(e.target.value);
+  }
+
+  function onSecondInputChange(e) {
+    setSecondInput(e.target.value);
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter') {
+      if (firstInput === '' || secondInput === '') return;
+      setName1(firstInput)
+      setName2(secondInput)
+    }
+  }
+
+  function handleButtonClick() {
+    if (firstInput === '' || secondInput === '') return;
+    setName1(firstInput)
+    setName2(secondInput)
+  }
 
   function handleCellClick(cellIndex) {
     if (matrix[cellIndex] || gameOver) {
@@ -113,38 +138,50 @@ function App() {
 
 
   return (
-    <div className={s.App}>
-      <div className={s.namesAndScore}>
-        <PlayerLabel
-          name={name1}
-          moveStatus={moveStatus}
+    name1 === 'Player 1' && name2 === 'Player 2' ?
+      <div>
+        <NameInput
+          onFirstInputChange={onFirstInputChange}
+          onSecondInputChange={onSecondInputChange}
+          onKeyDown={handleKeyDown}
+          content1={firstInput}
+          content2={secondInput}
+          handleButtonClick={handleButtonClick}
         />
-        <span>{firstScore}</span>
-        <span>{secondScore}</span>
-        <PlayerLabel
-          name={name2}
-          moveStatus={moveStatus}
-        />
-      </div>
-      <span className={moveStatus === 'Player 1 plays' ? s.statusP1 : s.statusP2}>{moveStatus}</span>
-      <div className={s.root}>
-        {matrix.map((symbol, i) => (
-          <Cell
-            content={symbol}
-            index={i}
-            onClick={() => handleCellClick(i)}
+      </div> :
+      <div className={s.App}>
+        <div className={s.namesAndScore}>
+          <PlayerLabel
+            name={name1}
+            content={firstInput}
+            moveStatus={moveStatus}
           />
-        ))}
+          <span>{firstScore}</span>
+          <span>{secondScore}</span>
+          <PlayerLabel
+            name={name2}
+            moveStatus={moveStatus}
+          />
+        </div>
+        <span className={moveStatus === 'Player 1 plays' ? s.statusP1 : s.statusP2}>{moveStatus}</span>
+        <div className={s.root}>
+          {matrix.map((symbol, i) => (
+            <Cell
+              content={symbol}
+              index={i}
+              onClick={() => handleCellClick(i)}
+            />
+          ))}
+        </div>
+        {gameOver && <div className={s.footer}>
+          <span>Congrats {moveStatus === 'Player 2 plays' ? name1 : name2}, you won the game!</span>
+          <button className={s.button} onClick={startOver}>Start over</button>
+        </div>}
+        {draw && <div className={s.footer}>
+          <span>This is a draw, try your luck again!</span>
+          <button className={s.button} onClick={startOver}>Start over</button>
+        </div>}
       </div>
-      {gameOver && <div className={s.footer}>
-        <span>Congrats {moveStatus === 'Player 2 plays' ? name1 : name2}, you won the game!</span>
-        <button className={s.button} onClick={startOver}>Start over</button>
-      </div>}
-      {draw && <div className={s.footer}>
-        <span>This is a draw, try your luck again!</span>
-        <button className={s.button} onClick={startOver}>Start over</button>
-      </div>}
-    </div>
   );
 }
 
