@@ -15,13 +15,13 @@ function NameInput({
       <div className={s.root}>
         <input
           className={s.input}
-          placeholder='Type your name'
+          placeholder='Type player 1 name'
           onChange={onFirstInputChange}
           value={content1}
         />
           <input
             className={s.input}
-            placeholder='Type your name and press Enter'
+            placeholder='Type player 2 name and press Enter'
             onChange={onSecondInputChange}
             value={content2}
             onKeyDown={onKeyDown}
