@@ -7,10 +7,10 @@ import NameInput from "./components/NameInput/NameInput";
 function App() {
   const [firstScore, setFirstScore] = useState(0);
   const [secondScore, setSecondScore] = useState(0);
-  const [moveStatus, setMoveStatus] = useState('Player 1 plays');
-  const [name1, setName1] = useState('Player 1');
-  const [name2, setName2] = useState('Player 2');
+  const [name1, setName1] = useState(null);
+  const [name2, setName2] = useState(null);
   const [gameOver, setGameOver] = useState(false);
+  const [moveStatus, setMoveStatus] = useState(null);
   const [draw, setDraw] = useState(false);
   const [firstInput, setFirstInput] = useState('');
   const [secondInput, setSecondInput] = useState('');
@@ -37,10 +37,15 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    setMoveStatus(`${name1} plays`)
+  }, [name1, name2])
+
   function handleButtonClick() {
     if (firstInput === '' || secondInput === '') return;
     setName1(firstInput)
     setName2(secondInput)
+    setMoveStatus(`${name1} plays`)
   }
 
   function handleCellClick(cellIndex) {
@@ -48,14 +53,14 @@ function App() {
       return
     }
 
-    if (moveStatus === 'Player 1 plays') {
+    if (moveStatus === `${name1} plays`) {
       setMatrix([...matrix.map((item, i) => {
         if (i === cellIndex) {
           return 'cross';
         }
         return item;
       })])
-      setMoveStatus('Player 2 plays')
+      setMoveStatus(`${name2} plays`)
     } else {
       setMatrix([...matrix.map((item, i) => {
         if (i === cellIndex) {
@@ -63,7 +68,7 @@ function App() {
         }
         return item;
       })])
-      setMoveStatus('Player 1 plays')
+      setMoveStatus(`${name1} plays`)
     }
   }
 
@@ -83,11 +88,20 @@ function App() {
       checkLine(3, 5, 7)
     ) {
       setGameOver(true);
-      if (moveStatus === 'Player 2 plays') {
+      if (moveStatus === `${name2} plays`) {
         setFirstScore(firstScore + 1)
-      } else if (moveStatus === 'Player 1 plays') {
+      } else if (moveStatus === `${name1} plays`) {
         setSecondScore(secondScore + 1)
       }
+    } else if (checkDrawLine(1, 2, 3) &&
+          checkDrawLine(4, 5, 6) &&
+          checkDrawLine(7, 8, 9) &&
+          checkDrawLine(1, 4, 7) &&
+          checkDrawLine(2, 5, 8) &&
+          checkDrawLine(3, 6, 9) &&
+          checkDrawLine(1, 5, 9) &&
+          checkDrawLine(3, 5, 7)) {
+      setDraw(true);
     }
   }
 
@@ -106,25 +120,6 @@ function App() {
     return matrix[x - 1] !== matrix[y - 1] || matrix[y - 1] !== matrix[z - 1];
   }
 
-  function checkDraw() {
-    if (
-      checkDrawLine(1, 2, 3) &&
-      checkDrawLine(4, 5, 6) &&
-      checkDrawLine(7, 8, 9) &&
-      checkDrawLine(1, 4, 7) &&
-      checkDrawLine(2, 5, 8) &&
-      checkDrawLine(3, 6, 9) &&
-      checkDrawLine(1, 5, 9) &&
-      checkDrawLine(3, 5, 7)
-    ) {
-      setDraw(true)
-    }
-  }
-
-  useEffect(() => {
-    checkDraw()
-  }, [matrix])
-
   function startOver() {
     setMatrix([
       null, null, null,
@@ -133,12 +128,12 @@ function App() {
     ]);
     setGameOver(false);
     setDraw(false);
-    setMoveStatus('Player 1 plays');
+    setMoveStatus(`${name1} plays`);
   }
 
 
   return (
-    name1 === 'Player 1' && name2 === 'Player 2' ?
+    !name1 || !name2 ?
       <div>
         <NameInput
           onFirstInputChange={onFirstInputChange}
@@ -163,7 +158,7 @@ function App() {
             moveStatus={moveStatus}
           />
         </div>
-        <span className={moveStatus === 'Player 1 plays' ? s.statusP1 : s.statusP2}>{moveStatus}</span>
+        <span className={moveStatus === `${name1} plays` ? s.statusP1 : s.statusP2}>{moveStatus}</span>
         <div className={s.root}>
           {matrix.map((symbol, i) => (
             <Cell
@@ -174,7 +169,7 @@ function App() {
           ))}
         </div>
         {gameOver && <div className={s.footer}>
-          <span>Congrats {moveStatus === 'Player 2 plays' ? name1 : name2}, you won the game!</span>
+          <span>Congrats {moveStatus === `${name2} plays` ? name1 : name2}, you won the game!</span>
           <button className={s.button} onClick={startOver}>Start over</button>
         </div>}
         {draw && <div className={s.footer}>
