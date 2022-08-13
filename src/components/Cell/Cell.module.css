@@ -32,3 +32,11 @@
   width: 44px;
   height: 44px;
 }
+
+.cellCheckedCross {
+ background-color: yellow;
+}
+
+.cellCheckedCircle {
+ background-color: cornflowerblue;
+}

@@ -14,6 +14,7 @@ function App() {
   const [draw, setDraw] = useState(false);
   const [firstInput, setFirstInput] = useState('');
   const [secondInput, setSecondInput] = useState('');
+  const [checkedCells, setCheckedCells] = useState(false);
 
   const [matrix, setMatrix] = useState([
     null, null, null,
@@ -87,20 +88,26 @@ function App() {
       checkLine(1, 5, 9) ||
       checkLine(3, 5, 7)
     ) {
+      matrix.map((item) => {
+          setCheckedCells(true);
+          return item;
+        }
+      )
       setGameOver(true);
       if (moveStatus === `${name2} plays`) {
         setFirstScore(firstScore + 1)
       } else if (moveStatus === `${name1} plays`) {
         setSecondScore(secondScore + 1)
       }
-    } else if (checkDrawLine(1, 2, 3) &&
-          checkDrawLine(4, 5, 6) &&
-          checkDrawLine(7, 8, 9) &&
-          checkDrawLine(1, 4, 7) &&
-          checkDrawLine(2, 5, 8) &&
-          checkDrawLine(3, 6, 9) &&
-          checkDrawLine(1, 5, 9) &&
-          checkDrawLine(3, 5, 7)) {
+    } else if (
+      checkDrawLine(1, 2, 3) &&
+      checkDrawLine(4, 5, 6) &&
+      checkDrawLine(7, 8, 9) &&
+      checkDrawLine(1, 4, 7) &&
+      checkDrawLine(2, 5, 8) &&
+      checkDrawLine(3, 6, 9) &&
+      checkDrawLine(1, 5, 9) &&
+      checkDrawLine(3, 5, 7)) {
       setDraw(true);
     }
   }
@@ -129,8 +136,8 @@ function App() {
     setGameOver(false);
     setDraw(false);
     setMoveStatus(`${name1} plays`);
+    setCheckedCells(false);
   }
-
 
   return (
     !name1 || !name2 ?
@@ -165,6 +172,7 @@ function App() {
               content={symbol}
               index={i}
               onClick={() => handleCellClick(i)}
+              checkedCells={checkedCells}
             />
           ))}
         </div>
