@@ -19,13 +19,13 @@ function NameInput({
           onChange={onFirstInputChange}
           value={content1}
         />
-          <input
-            className={s.input}
-            placeholder='Type player 2 name and press Enter'
-            onChange={onSecondInputChange}
-            value={content2}
-            onKeyDown={onKeyDown}
-          />
+        <input
+          className={s.input}
+          placeholder='Type player 2 name and press Enter'
+          onChange={onSecondInputChange}
+          value={content2}
+          onKeyDown={onKeyDown}
+        />
         <button
           className={s.button}
           onClick={handleButtonClick}

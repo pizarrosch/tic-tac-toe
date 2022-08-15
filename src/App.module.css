@@ -61,3 +61,7 @@
     width: 300px;
   }
 }
+
+.cellCheckedCross {
+  background-color: yellow;
+}
